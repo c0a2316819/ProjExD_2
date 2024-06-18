@@ -24,7 +24,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
 def create_bomb_images_and_speeds():
     bb_imgs = []
     bb_accs = [a for a in range(1, 11)]
-    for r in range(1, 11):
+    for r in range(1, 11):　　　　　＃玉の大きさ
         bb_img = pg.Surface((20*r, 20*r))
         bb_img.set_colorkey((0, 0, 0))
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
