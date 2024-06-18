@@ -23,7 +23,6 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
     if rct.left < 0 or WIDTH < rct.right:  # 横方向判定
         yoko = False
     if rct.top < 0 or HEIGHT < rct.bottom:　# 縦方向判定
-
         tate = False
     return yoko, tate
 
@@ -58,9 +57,7 @@ def main():
                 return
         if kk_rct.colliderect(bb_rct): # 衝突判定
             return # ゲームオーバー
-
         screen.blit(bg_img, [0, 0]) 
-
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for k,v in DELTA.items():
@@ -71,7 +68,6 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         screen.blit(kk_img, kk_rct)
-
         bb_rct.move_ip(vx,vy)
         yoko, tate = check_bound(bb_rct)
         if not yoko: # 横方向にはみ出たら
@@ -83,11 +79,9 @@ def main():
         bb_img = bb_imgs[index]
         bb_rct = bb_img.get_rect(center=bb_rct.center)
         screen.blit(bb_img, bb_rct)
-
         avx = vx * bb_accs[index]
         avy = vy * bb_accs[index]
         bb_rct.move_ip(avx, avy)
-        
         pg.display.update()
         tmr += 1
         clock.tick(50)
