@@ -21,6 +21,17 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
         tate = False
     return yoko, tate
 
+def create_bomb_images_and_speeds():
+    bb_imgs = []
+    bb_accs = [a for a in range(1, 11)]
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        bb_img.set_colorkey((0, 0, 0))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_imgs.append(bb_img)
+    return bb_imgs, bb_accs
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -28,9 +39,8 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
-    bb_img = pg.Surface((20,20))
-    bb_img.set_colorkey((0,0,0))
-    pg.draw.circle(bb_img,(255,0,0),(10,10),10)
+    bb_imgs, bb_accs = create_bomb_images_and_speeds()
+    bb_img = bb_imgs[0]
     bb_rct = bb_img.get_rect()
     bb_rct.center = random.randint(0,WIDTH),random.randint(0,HEIGHT)
     vx,vy = +5,+5
@@ -63,7 +73,15 @@ def main():
         if not tate:
             vy *= -1
 
-        screen.blit(bb_img,bb_rct)
+        index = min(tmr // 500, 9)
+        bb_img = bb_imgs[index]
+        bb_rct = bb_img.get_rect(center=bb_rct.center)
+        screen.blit(bb_img, bb_rct)
+
+        avx = vx * bb_accs[index]
+        avy = vy * bb_accs[index]
+        bb_rct.move_ip(avx, avy)
+        
         pg.display.update()
         tmr += 1
         clock.tick(50)
