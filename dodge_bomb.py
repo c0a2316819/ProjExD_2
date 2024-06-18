@@ -55,7 +55,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        if kk_rct.colliderect(bb_rct):# 衝突判定
+        if kk_rct.colliderect(bb_rct):# 衝突判定 
             return
 
         screen.blit(bg_img, [0, 0]) 
