@@ -14,7 +14,7 @@ pg.K_RIGHT:(+5,0),
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
-    """
+     """
     引数：こうかとんRect，または，爆弾Rect
     戻り値：真理値タプル（横方向，縦方向）
     画面内ならTrue／画面外ならFalse
@@ -22,14 +22,14 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
     yoko, tate = True, True
     if rct.left < 0 or WIDTH < rct.right:  # 横方向判定
         yoko = False
-    if rct.top < 0 or HEIGHT < rct.bottom:　# 縦方向判定
+    if rct.top < 0 or HEIGHT < rct.bottom:# 縦方向判定
         tate = False
     return yoko, tate
 
 def create_bomb_images_and_speeds():
     bb_imgs = []
     bb_accs = [a for a in range(1, 11)]
-    for r in range(1, 11):　　　　　#玉の大きさ
+    for r in range(1, 11):#玉の大きさ
         bb_img = pg.Surface((20*r, 20*r))
         bb_img.set_colorkey((0, 0, 0))
         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
@@ -48,16 +48,18 @@ def main():
     bb_img = bb_imgs[0]
     bb_rct = bb_img.get_rect()# 爆弾Rect
     bb_rct.center = random.randint(0,WIDTH),random.randint(0,HEIGHT)
-    vx,vy = +5,+5 # 爆弾の横方向速度，縦方向速度
+    vx,vy = +5,+5# 爆弾の横方向速度，縦方向速度
     clock = pg.time.Clock()
     tmr = 0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        if kk_rct.colliderect(bb_rct): # 衝突判定
-            return # ゲームオーバー
+        if kk_rct.colliderect(bb_rct):# 衝突判定
+            return
+
         screen.blit(bg_img, [0, 0]) 
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         for k,v in DELTA.items():
@@ -68,20 +70,23 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         screen.blit(kk_img, kk_rct)
+
         bb_rct.move_ip(vx,vy)
         yoko, tate = check_bound(bb_rct)
-        if not yoko: # 横方向にはみ出たら
+        if not yoko:# 横方向にはみ出たら
             vx *= -1
-        if not tate: # 縦方向にはみ出たら
+        if not tate:# 縦方向にはみ出たら
             vy *= -1
 
         index = min(tmr // 500, 9)
         bb_img = bb_imgs[index]
         bb_rct = bb_img.get_rect(center=bb_rct.center)
         screen.blit(bb_img, bb_rct)
+
         avx = vx * bb_accs[index]
         avy = vy * bb_accs[index]
         bb_rct.move_ip(avx, avy)
+        
         pg.display.update()
         tmr += 1
         clock.tick(50)
